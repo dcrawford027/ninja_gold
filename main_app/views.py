@@ -5,22 +5,37 @@ import random
 def index(request):
     if 'purse' not in request.session:
         request.session['purse'] = 0
-    if 'log' not in request.session:
-        request.session['log'] = []
+    if 'logs' not in request.session:
+        request.session['logs'] = []
     return render(request, 'index.html')
 
 def processMoney(request):
     loc = request.POST['location']
     if loc == 'farm':
-        request.session['purse'] += random.randint(10, 20)
+        gold = random.randint(10, 20)
+        request.session['purse'] += gold
+        request.session['logs'].append('\nEarned ' + str(gold) + ' gold from the ' + loc + '!')
     elif loc == 'cave':
-        request.session['purse'] += random.randint(5, 10)
+        gold = random.randint(5, 10)
+        request.session['purse'] += gold
+        request.session['logs'].append('\nEarned ' + str(gold) + ' gold from the ' + loc + '!')
     elif loc == 'house':
-        request.session['purse'] += random.randint(2, 5)
+        gold = random.randint(2, 5)
+        request.session['purse'] += gold
+        request.session['logs'].append('\nEarned ' + str(gold) + ' gold from the ' + loc + '!')
     elif loc == 'casino':
         giveOrTake = random.randint(0, 10) % 2
         if giveOrTake == 0:
-            request.session['purse'] += random.randint(0, 50)
+            gold = random.randint(0, 50)
+            request.session['purse'] += gold
+            request.session['logs'].append('\nEntered a casino and won ' + str(gold) + ' gold! Lucky!')
         elif giveOrTake == 1:
-            request.session['purse'] -= random.randint(0, 50)
+            gold = random.randint(0, 50)
+            request.session['purse'] -= gold
+            request.session['logs'].append('\nEntered a casino and lost ' + str(gold) + ' gold... Ouch..')
+    return redirect('/')
+
+def clearSession(request):
+    del request.session['purse']
+    del request.session['logs']
     return redirect('/')

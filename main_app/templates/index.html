@@ -49,7 +49,8 @@
     </div>
     <div>
         <p>Activities:</p>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
+        <textarea readonly="textareaEdit" id="" cols="135" rows="10">{% for log in request.session.logs %}{{ log }}{% endfor %}
+        </textarea>
     </div>
 </body>
 </html>
